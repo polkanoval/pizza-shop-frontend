@@ -1,22 +1,21 @@
-# --- ЭТАП 1: Сборка проекта ---
+# --- Р­С‚Р°Рї 1: РЎР±РѕСЂРєР° РїСЂРѕРµРєС‚Р° ---
 FROM node:20-alpine AS build
 WORKDIR /app
 
-# Сначала копируем только файлы зависимостей (для кэширования слоев)
 COPY package*.json ./
 RUN npm install
 
-# Копируем остальной код и собираем билд
 COPY . .
 RUN npm run build
 
-# --- ЭТАП 2: Раздача статики ---
+# --- Р­С‚Р°Рї 2: РџСЂРѕРґР°РєС€РЅ-СЃРµСЂРІРµСЂ ---
 FROM nginx:stable-alpine
 
+# РљРѕРїРёСЂСѓРµРј Р±РёР»Рґ РёР· РїРµСЂРІРѕРіРѕ СЌС‚Р°РїР°
 COPY --from=build /app/build /usr/share/nginx/html
 
+# РљРѕРїРёСЂСѓРµРј РЅР°С€ РЈРџР РћР©Р•РќРќР«Р™ РєРѕРЅС„РёРі
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Открываем 80 порт для веб-трафика
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

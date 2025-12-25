@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main
-    paths:
-          - '**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,7 +15,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ЭТОТ ШАГ ОБЯЗАТЕЛЕН для работы кэша
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -31,11 +29,12 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          # Убедитесь, что Dockerfile лежит в корне репозитория frontend
+          file: ./Dockerfile
           push: true
-          # Используем переменную репозитория напрямую
+          # ВАЖНО: приводим название к нижнему регистру (GHCR не любит заглавные)
           tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/pizza-shop-frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -44,18 +43,18 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          # Используем ваш секрет SSH_PRIVATE_KEY
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # Переходим в папку проекта на сервере
             cd /var/www/polkanoval-project
 
-            # Авторизуемся в GHCR на сервере
-            docker login ghcr.io -u ${{ secrets.USER }} -p ${{ secrets.GITHUB_TOKEN }}
+            # 1. ПЕРВАЯ ЛОВУШКА: GITHUB_TOKEN не работает на сервере через SSH
+            # Используйте заранее созданный Personal Access Token (PAT) в секретах
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # Скачиваем новые образы и перезапускаем контейнеры
-            docker compose pull
-            docker compose up -d
+            # 2. ВТОРАЯ ЛОВУШКА: docker-compose.yml должен быть в этой папке
+            # Он берется из репозитория 'deploy'. Убедитесь, что он там лежит.
+            docker compose pull frontend
+            docker compose up -d frontend
 
-            # Очищаем место от старых образов
+            # Удаляем старые висячие образы (экономим место на диске)
             docker image prune -f
