@@ -29,14 +29,16 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          # Убедитесь, что Dockerfile лежит в корне репозитория frontend
           file: ./Dockerfile
           push: true
-          # ВАЖНО: приводим название к нижнему регистру (GHCR не любит заглавные)
           tags: |
             ghcr.io/${{ github.repository_owner }}/pizza-shop-frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          # ДОБАВЛЕНО: Передача секретов в процесс сборки
+          build-args:
+            REACT_APP_YMAPS_JS_API_KEY: ${{ secrets.REACT_APP_YMAPS_JS_API_KEY }}
+            REACT_APP_YMAPS_SUGGEST_API_KEY: ${{ secrets.REACT_APP_YMAPS_SUGGEST_API_KEY }}
 
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -47,14 +49,9 @@ jobs:
           script: |
             cd /var/www/polkanoval-project
 
-            # 1. ПЕРВАЯ ЛОВУШКА: GITHUB_TOKEN не работает на сервере через SSH
-            # Используйте заранее созданный Personal Access Token (PAT) в секретах
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # 2. ВТОРАЯ ЛОВУШКА: docker-compose.yml должен быть в этой папке
-            # Он берется из репозитория 'deploy'. Убедитесь, что он там лежит.
             docker compose pull frontend
             docker compose up -d frontend
 
-            # Удаляем старые висячие образы (экономим место на диске)
             docker image prune -f
