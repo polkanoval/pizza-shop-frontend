@@ -12,7 +12,7 @@ const addYandexMapScript = () => {
   if (jsApiKey && suggestApiKey) {
     // Собираем URL с использованием переменных окружения
     // script.src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=%REACT_APP_YMAPS_JS_API_KEY%&suggest_apikey=%REACT_APP_YMAPS_SUGGEST_API_KEY%"
-    script.src = `https://api-maps.yandex.ru{jsApiKey}&suggest_apikey=${suggestApiKey}`;
+    script.src = `https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey={jsApiKey}&suggest_apikey=${suggestApiKey}`;
     script.type = 'text/javascript';
     document.head.appendChild(script);
   } else {
