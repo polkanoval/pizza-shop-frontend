@@ -12,6 +12,7 @@ ENV REACT_APP_YMAPS_SUGGEST_API_KEY=$REACT_APP_YMAPS_SUGGEST_API_KEY
 
 COPY package*.json ./
 RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY . .
 # Теперь npm run build увидит эти переменные

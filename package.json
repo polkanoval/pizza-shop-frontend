@@ -12,6 +12,7 @@
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-helmet-async": "^2.0.5",
     "react-number-format": "^5.4.4",
     "react-router-dom": "^7.9.5",
     "react-router-hash-link": "^2.4.3",
