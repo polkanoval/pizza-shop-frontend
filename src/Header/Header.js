@@ -128,35 +128,34 @@ function Header() {
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="modal-close" onClick={closeModal}>&times;</button>
-
-            <form className="login-modal-form" onSubmit={handleSubmit}>
-              <h3>Вход или регистрация</h3>
-              <div className="name">
-                <input className="intxt"
-                  ref={inputRef}
-                  type="text"
-                  placeholder="Телефон"
-                  value={username}
-                  onChange={handleUsernameChange}
-                  maxLength={12}
-                  minLength={12}
-                  onFocus={handleUsernameFocus}
-                  onBlur={handleUsernameBlur}
-                />
-                <input className="intxt"
-                  type="password"
-                  placeholder="Пароль"
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
-              </div>
-              <button className="btn1" type="submit">Войти</button>
-
-              <div className="login_reg">
-                <span>Нет аккаунта?</span>
-                <a href="/registration">Зарегистрироваться</a>
-              </div>
-            </form>
+              <form className="login-modal-form" onSubmit={handleSubmit}>
+                  <h3>Вход или регистрация</h3>
+                  <div className="name">
+                    <input className="intxt"
+                      ref={inputRef}
+                      type="text"
+                      inputMode="numeric"
+                       placeholder={isFocused ? '' : "Ваш тестовый номер (любой)"}
+                      value={username}
+                      onChange={handleUsernameChange}
+                      maxLength={12}
+                      minLength={12}
+                      onFocus={handleUsernameFocus}
+                      onBlur={handleUsernameBlur}
+                    />
+                    <input className="intxt"
+                      type="password"
+                      placeholder="Ваш пароль"
+                      value={password}
+                      onChange={handlePasswordChange}
+                    />
+                  </div>
+                  <button className="btn1" type="submit">Войти</button>
+                    <div className="login_reg">
+                      <span>Ещё нет аккаунта?</span>
+                      <a href="/registration">Создать</a>
+                    </div>
+              </form>
           </div>
         </div>
       )}

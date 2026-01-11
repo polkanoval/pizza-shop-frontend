@@ -6,8 +6,27 @@ import Menu from './Menu';
 import Discount from './Discount';
 import AboutCompany from './AboutCompany';
 import Footer from '../Footer/Footer';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 function MainPage() {
+  useEffect(() => {
+    // Появляется через 2.5 секунды после загрузки
+    const timer = setTimeout(() => {
+      toast.info("🍕 Добро пожаловать! Это демо-сайт. Смело добавляйте пиццу в корзину и тестируйте заказ с любыми данными!", {
+        position: "bottom-right",
+        autoClose: 8000, // 8 секунд, чтобы точно успели прочитать
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        icon: "🚀"
+      });
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       {/* 2. Настраиваем SEO для Главной страницы */}

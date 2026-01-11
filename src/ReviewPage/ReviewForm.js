@@ -42,6 +42,11 @@ const ReviewForm = ({ onAdd, initialData }) => {
       feedback  : feedback.trim()  // Отправляю текст отзыва
     });
 
+    toast.success("🚀 Отправлено! Теперь я увижу ваш отзыв в панели управления.", {
+        position: "top-center",
+        autoClose: 5000,
+    });
+
     // Очищаю форму
     setEval('');
     setfeedback('');
@@ -56,20 +61,24 @@ const ReviewForm = ({ onAdd, initialData }) => {
             type="number"
             min="1"
             max="10"
-            placeholder="Оценка (1-10)"
+            inputMode="numeric"
+            placeholder="Оценка (1-10) ⭐"
             value={evaluation}
             onChange={handleEvalChange}
           />
           <input className="infotxt"
             type="text"
-            placeholder="Отзыв (до 120 символов)"
+            placeholder="Ваш отзыв..."
             value={feedback}
             onChange={handleFeedbackChange}
             maxLength={120}
           />
         </div>
+        <p style={{ fontSize: '12px', color: '#666', marginTop: '10px', fontStyle: 'italic' }}>
+          💡 После отправки отзыв попадет в админку Django. Он станет публичным только после моей модерации.
+        </p>
       </div>
-      <button type="submit" className="btn1">Отправить</button>
+      <button type="submit" className="btn1">Отправить на модерацию</button>
     </form>
   );
 }

@@ -102,44 +102,54 @@ const Registr = () => {
   };
 
   return (
-      <form className="profile" onSubmit={handleSubmit}>
-        <h2>Регистрация</h2>
-        <h3>Имя</h3>
-        <div className="profile_edit">
-          <input className="infotxt"
-            type="text"
-            placeholder="Введите имя"
-            value={name}
-            onChange={handleNameChange}
-          />
-        </div>
-        <h3>Номер телефона</h3>
-        <div className="profile_edit">
-          <input className="infotxt"
-            ref={inputRef}
-            type="text"
-            placeholder= {isFocused ? '' : "Введите номер телефона"}
-            value={username}
-            onChange={handleUsernameChange}
-            maxLength={12}
-            minLength={12}
-            onFocus={handleUsernameFocus}
-            onBlur ={handleUsernameBlur}
-          />
-        </div>
-        <h3>Пароль</h3>
-        <div className="profile_edit">
-          <input className="infotxt"
-            type="password"
-            placeholder="Введите пароль"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <div className="enter_btns">
-          <button className="btn1" type="submit" style={{width:'200px'}} >Зарегистрироваться</button>
-        </div>
-      </form>
+    <form className="profile" onSubmit={handleSubmit}>
+         <h2>Регистрация</h2>
+
+         <h3>Имя</h3>
+         <div className="profile_edit">
+           <input className="infotxt"
+             type="text"
+             placeholder="Любое имя (хоть 'Тестер' или 'Админ')"
+             value={name}
+             onChange={handleNameChange}
+           />
+         </div>
+
+         <h3>Номер телефона</h3>
+         <div className="profile_edit">
+           <input className="infotxt"
+             ref={inputRef}
+             type="text"
+             inputMode="numeric"
+             placeholder= {isFocused ? '' : "Любые цифры (напр. +7999...)"}
+             value={username}
+             onChange={handleUsernameChange}
+             maxLength={12}
+             minLength={12}
+             onFocus={handleUsernameFocus}
+             onBlur ={handleUsernameBlur}
+           />
+         </div>
+
+         <h3>Пароль</h3>
+         <div className="profile_edit">
+           <input className="infotxt"
+             type="password"
+             placeholder="Придумайте любой простой пароль"
+             value={password}
+             onChange={handlePasswordChange}
+           />
+         </div>
+
+         <div className="enter_btns">
+           <button className="btn1" type="submit" style={{width:'200px'}} >Зарегистрироваться</button>
+         </div>
+
+         <p style={{ fontSize: '11px', color: '#777', textAlign: 'center', marginTop: '10px' }}>
+           * Смс-подтверждение отключено для удобства теста.
+           <br/>Вводите любые данные!
+         </p>
+    </form>
    );
   }
 

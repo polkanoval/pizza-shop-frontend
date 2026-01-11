@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../AuthContext/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -8,6 +8,23 @@ const Enter = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
+
+  useEffect(() => {
+    const redirectPath = localStorage.getItem('redirectAfterLogin');
+
+    if (redirectPath === '/basket') {
+      toast.info("📍 Почти готово! Войдите в профиль, и ваш заказ в корзине будет ждать вас.", {
+        position: "top-center",
+        autoClose: 6000,
+        icon: "💾"
+      });
+    } else if (redirectPath === '/review') {
+      toast.info("📝 Войдите, чтобы ваш отзыв сохранился в системе.", {
+        position: "top-center",
+        autoClose: 6000,
+      });
+    }
+  }, []);
 
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
@@ -69,36 +86,41 @@ const Enter = () => {
   };
 
   return (
-      <form className="profile" onSubmit={handleSubmit}>
-        <h2>Вход</h2>
-        <h3>Номер телефона</h3>
-        <div className="profile_edit">
-          <input className="infotxt"
-            ref={inputRef}
-            type="text"
-            placeholder= {isFocused ? '' : "Номер телефона"}
-            value={username}
-            onChange={handleUsernameChange}
-            maxLength={12}
-            minLength={12}
-            onFocus={handleUsernameFocus}
-            onBlur ={handleUsernameBlur}
-          />
-        </div>
-        <h3>Пароль</h3>
-        <div className="profile_edit">
-          <input className="infotxt"
-            type="password"
-            placeholder="Введите пароль"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <div className="enter_btns">
-          <button className="btn1" type="submit">Вход</button>
-          <button className="btn1" type="button" onClick={() => navigate('/registration')}>Регистрация</button>
-        </div>
-      </form>
+    <form className="profile" onSubmit={handleSubmit}>
+      <h2>Вход в систему</h2>
+      <h3>Номер телефона</h3>
+      <div className="profile_edit">
+        <input className="infotxt"
+          ref={inputRef}
+          type="text"
+          inputMode="numeric"
+          /* Подсказываем, что подойдет любой номер из теста */
+          placeholder= {isFocused ? '' : "Ваш тестовый номер (любой)"}
+          value={username}
+          onChange={handleUsernameChange}
+          maxLength={12}
+          minLength={12}
+          onFocus={handleUsernameFocus}
+          onBlur ={handleUsernameBlur}
+        />
+      </div>
+      <h3>Пароль</h3>
+      <div className="profile_edit">
+        <input className="infotxt"
+          type="password"
+          placeholder="Ваш пароль"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+      </div>
+      <div className="enter_btns">
+        <button className="btn1" type="submit">Войти</button>
+        <button className="btn1" type="button" onClick={() => navigate('/registration')}>Регистрация</button>
+      </div>
+      <p style={{ fontSize: '12px', color: '#888', marginTop: '15px', textAlign: 'center' }}>
+        💡 Не помните данные? Просто создайте новый аккаунт за 5 секунд.
+      </p>
+    </form>
   );
 }
 

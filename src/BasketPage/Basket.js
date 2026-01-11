@@ -62,7 +62,7 @@ function Basket() {
   useEffect(() => {
     const savedData = localStorage.getItem('orderFormData');
     if (savedData) {
-      const { adress } = JSON.parse(savedData);
+      const { adress, apartment } = JSON.parse(savedData);
       setAddres(adress || '');
       setApartment(apartment || '');
       localStorage.removeItem('orderFormData');
@@ -121,8 +121,11 @@ function Basket() {
 
     if (!user) {
        saveFormData(); // Сохраняю введенные данные и путь перенаправления
-       toast.info('Пожалуйста, войдите или зарегистрируйтесь для оформления заказа.');
-       navigate('/enter'); // Перенаправляю на страницу входа
+       toast.info('🔐 Почти готово! Войдите или зарегистрируйтесь, чтобы мы сохранили этот заказ в вашей истории.', {
+          position: "top-center",
+          autoClose: 8000
+        });
+           navigate('/enter'); // Перенаправляю на страницу входа
        return;
      }
 
@@ -233,51 +236,67 @@ function Basket() {
       {cartItems.length === 0 ? (
             null
         ) : (
-            <form onSubmit={handleFormSubmit}>
-              <div className="arrangement">
-                <h2>Оформление</h2>
-                <div>
-                  <h3>Адрес доставки </h3>
-                  <input className="infotxt" type="text" id="address-input" placeholder="Город/Улица/Дом" value={adress} onChange={handleAdressChange} required/>
-                  <input
-                      className="infotxt apartment_input"
-                      type="text"
-                      placeholder="Кв./Офис/Подъезд"
-                      value={apartment}
-                      onChange={handleApartmentChange}
-                      required
-                      style={{ marginTop: '10px' }}
-                    />
-                </div>
-              </div>
-
-              <div className="payment">
-                <h3>Оплата картой</h3>
-                <input className="infotxt"
+          <form onSubmit={handleFormSubmit}>
+            <div className="arrangement">
+              <h2>Оформление</h2>
+              <div>
+                <h3>Адрес доставки</h3>
+                <input
+                  className="infotxt"
                   type="text"
-                  placeholder="Введите номер карты"
-                  value={cardnum}
-                  onChange={handleCardNumChange}
-                  maxLength={16}
+                  id="address-input"
+                  placeholder="Начните вводить адрес (работает автоподбор Яндекса) 📍"
+                  value={adress}
+                  onChange={handleAdressChange}
+                  required
                 />
-              <div className="cardinfo">
-                <PatternFormat className="infotxt"
-                  format="##/##"
-                  placeholder="MM/ГГ"
-                  value={carddata}
-                  onChange={handleCardDataChange}
-                />
-                <input className="infotxt"
+                <input
+                  className="infotxt apartment_input"
                   type="text"
-                  placeholder="CVC/CVV"
-                  value={cardcvc}
-                  onChange={handleCardCVCChange}
-                  maxLength={3}
+                  placeholder="Кв/офис (любой)"
+                  value={apartment}
+                  onChange={handleApartmentChange}
+                  required
+                  style={{ marginTop: '10px' }}
                 />
               </div>
-              <button className="btn2" type="submit" >Заказать</button>
             </div>
-           </form>
+            <div className="payment">
+              <h3>Оплата картой</h3>
+              <input
+                className="infotxt"
+                type="text"
+                inputMode="numeric"
+                placeholder="Любые 16 цифр (карта не важна)"
+                value={cardnum}
+                onChange={handleCardNumChange}
+                maxLength={16}
+              />
+            <div className="cardinfo">
+              <PatternFormat
+                className="infotxt"
+                format="##/##"
+                inputMode="numeric"
+                placeholder="Любой срок"
+                value={carddata}
+                onChange={handleCardDataChange}
+              />
+              <input
+                className="infotxt"
+                type="text"
+                inputMode="numeric"
+                placeholder="CVC"
+                value={cardcvc}
+                onChange={handleCardCVCChange}
+                maxLength={3}
+              />
+            </div>
+            <button className="btn2" type="submit">Заказать</button>
+            <p style={{ fontSize: '12px', color: '#888', marginTop: '8px', textAlign: 'center' }}>
+              * Это тестовый сайт, вводите вымышленные данные
+            </p>
+          </div>
+          </form>
         )}
     </div>
   );
