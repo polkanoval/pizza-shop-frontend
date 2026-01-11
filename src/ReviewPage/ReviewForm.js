@@ -42,11 +42,6 @@ const ReviewForm = ({ onAdd, initialData }) => {
       feedback  : feedback.trim()  // Отправляю текст отзыва
     });
 
-    toast.success("🚀 Отправлено! Теперь я увижу ваш отзыв в панели управления.", {
-        position: "top-center",
-        autoClose: 5000,
-    });
-
     // Очищаю форму
     setEval('');
     setfeedback('');
